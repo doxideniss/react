@@ -11,7 +11,7 @@ import Settings from "./components/Settings/Settings";
 
 const App = (props) => {
 
-  let {dialogsData, messageData, postData} = props
+  let { state, addPost, updateNewPostText } = props;
 
   return (
     <BrowserRouter>
@@ -20,8 +20,8 @@ const App = (props) => {
         <Navbar />
         <div className="app-wrapper-content">
 
-          <Route path={"/profile"} render={() => <Profile postData={postData}/>} />
-          <Route path={"/dialogs"} render={() => <Dialogs dialogsData={dialogsData} messageData={messageData} />} />
+          <Route path={"/profile"} render={() => <Profile state={state.profilePage} addPost={addPost} updateNewPostText={updateNewPostText} />} />
+          <Route path={"/dialogs"} render={() => <Dialogs state={state.dialogPage} />} />
 
           <Route path={"/news"} component={News} />
           <Route path={"/music"} component={Music} />
