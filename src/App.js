@@ -1,5 +1,5 @@
 import React from "react";
-import {Route, BrowserRouter} from "react-router-dom";
+import { Route, BrowserRouter } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header/Header";
 import Navbar from "./components/Navbar/Navbar";
@@ -9,28 +9,35 @@ import News from "./components/News/News";
 import Music from "./components/Music/Music";
 import Settings from "./components/Settings/Settings";
 
-const App = (props) => {
+const App = props => {
+  let { store } = props;
 
-  let {store} = props;
-  let state = store.getState()
+  let state = store.getState();
 
   return (
     <BrowserRouter>
       <div className="app-wrapper">
-        <Header/>
-        <Navbar/>
+        <Header />
+        <Navbar />
         <div className="app-wrapper-content">
-
-          <Route path={"/profile"} render={() => <Profile state={state.profilePage}
-                                                          addPost={store.addPost.bind(store)}
-                                                          updateNewPostText={store.updateNewPostText.bind(store)}
-                                                  />}
+          <Route
+            path={"/profile"}
+            render={() => (
+              <Profile
+                state={state.profilePage}
+                addPost={store.addPost.bind(store)}
+                updateNewPostText={store.updateNewPostText.bind(store)}
+              />
+            )}
           />
-          <Route path={"/dialogs"} render={() => <Dialogs state={state.dialogPage}/>}/>
+          <Route
+            path={"/dialogs"}
+            render={() => <Dialogs state={state.dialogPage} />}
+          />
 
-          <Route path={"/news"} component={News}/>
-          <Route path={"/music"} component={Music}/>
-          <Route path={"/settings"} component={Settings}/>
+          <Route path={"/news"} component={News} />
+          <Route path={"/music"} component={Music} />
+          <Route path={"/settings"} component={Settings} />
         </div>
       </div>
     </BrowserRouter>
