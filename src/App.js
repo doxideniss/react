@@ -25,14 +25,18 @@ const App = props => {
             render={() => (
               <Profile
                 state={state.profilePage}
-                addPost={store.addPost.bind(store)}
-                updateNewPostText={store.updateNewPostText.bind(store)}
+                dispatch={store.dispatch.bind(store)}
               />
             )}
           />
           <Route
             path={"/dialogs"}
-            render={() => <Dialogs state={state.dialogPage} />}
+            render={() => (
+              <Dialogs
+                state={state.dialogPage}
+                dispatch={store.dispatch.bind(store)}
+              />
+            )}
           />
 
           <Route path={"/news"} component={News} />
