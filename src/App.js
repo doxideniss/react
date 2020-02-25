@@ -10,9 +10,7 @@ import Music from "./components/Music/Music";
 import Settings from "./components/Settings/Settings";
 
 const App = props => {
-  let { store } = props;
-
-  let state = store.getState();
+  let { state, store } = props;
 
   return (
     <BrowserRouter>
@@ -33,7 +31,7 @@ const App = props => {
             path={"/dialogs"}
             render={() => (
               <Dialogs
-                state={state.dialogPage}
+                state={state.dialogsPage}
                 dispatch={store.dispatch.bind(store)}
               />
             )}
