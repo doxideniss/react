@@ -4,37 +4,23 @@ import "./App.css";
 import Header from "./components/Header/Header";
 import Navbar from "./components/Navbar/Navbar";
 import Profile from "./components/Profile/Profile";
-import Dialogs from "./components/Dialogs/Dialogs";
+import DialogsContainer from "./components/Dialogs/DialogsContainer";
 import News from "./components/News/News";
 import Music from "./components/Music/Music";
 import Settings from "./components/Settings/Settings";
 
 const App = props => {
-  let { state, store } = props;
-
+  let { store } = props;
   return (
     <BrowserRouter>
       <div className="app-wrapper">
         <Header />
         <Navbar />
         <div className="app-wrapper-content">
-          <Route
-            path={"/profile"}
-            render={() => (
-              <Profile
-                state={state.profilePage}
-                dispatch={store.dispatch.bind(store)}
-              />
-            )}
-          />
+          <Route path={"/profile"} render={() => <Profile store={store} />} />
           <Route
             path={"/dialogs"}
-            render={() => (
-              <Dialogs
-                state={state.dialogsPage}
-                dispatch={store.dispatch.bind(store)}
-              />
-            )}
+            render={() => <DialogsContainer store={store} />}
           />
 
           <Route path={"/news"} component={News} />

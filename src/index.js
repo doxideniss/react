@@ -5,12 +5,14 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import store from "./redux/reduxStore";
 
-let rerenderTree = state => {
-  ReactDOM.render(<App state={state} store={store} />, document.getElementById("root"));
+let rerenderTree = store => {
+  ReactDOM.render(<App store={store} />, document.getElementById("root"));
 };
-rerenderTree(store.getState());
+rerenderTree(store);
 
-store.subscribe(() => { rerenderTree(store.getState()) });
+store.subscribe(() => {
+  rerenderTree(store);
+});
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
