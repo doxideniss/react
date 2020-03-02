@@ -7,7 +7,7 @@ const MyPosts = props => {
   const {state, addPost, updateNewPostText} = props
 
   let postsEl = state.posts.map(p => (
-    <Post message={p.message} likesCount={p.likes} />
+    <Post key={p.id} message={p.message} likesCount={p.likes} />
   ));
 
   let newPostEl = React.createRef();

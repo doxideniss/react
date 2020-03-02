@@ -7,9 +7,9 @@ const Dialogs = props => {
   let { state, messageChange, messageClick } = props;
 
   let dialogsEl = state.dialogs.map(x => (
-    <DialogItem name={x.name} id={x.id} />
+    <DialogItem key={x.id} name={x.name} id={x.id} />
   ));
-  let messagesEl = state.messages.map(x => <Message message={x.message} />);
+  let messagesEl = state.messages.map(x => <Message key={x.id} message={x.message} />);
 
   const onMessageChange = e => {
     messageChange(e.target.value);
