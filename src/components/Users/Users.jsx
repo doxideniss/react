@@ -3,72 +3,64 @@ import User from "./User/User";
 import s from './Users.module.css'
 import * as axios from 'axios';
 
-class Users extends React.Component {
+const Users = (props) => {
 
-  componentDidMount() {
-    axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`)
-      .then(res => {
-        this.props.setUsers(res.data.items)
-        this.props.setTotalCount(res.data.totalCount)
-      })
-  }
+  let pagesCount = Math.ceil(props.totalUsersCount / props.pageSize)
+  function pagination(c, m) {
+    let current = c,
+      last = m,
+      delta = 2,
+      left = current - delta,
+      right = current + delta + 1,
+      range = [],
+      rangeWithDots = [],
+      l;
 
-  // componentDidUpdate(prevProps, prevState, snapshot) {
-  //   if (prevProps.currentPage !== this.props.currentPage) {
-  //     axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`)
-  //       .then(res => {
-  //         this.props.setUsers(res.data.items)
-  //         this.props.setTotalCount(res.data.totalCount)
-  //       })
-  //   }
-  //
-  // }
-
-  onClickPagination = (p) => {
-    return () => {
-      this.props.setCurrentPage(p)
-      axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${p}&count=${this.props.pageSize}`)
-        .then(res => {
-          this.props.setUsers(res.data.items)
-          this.props.setTotalCount(res.data.totalCount)
-        })
-    }
-  }
-
-  render() {
-
-    let pagesCount = Math.ceil(this.props.totalUsersCount / this.props.pageSize)
-
-    let pages = []
-
-    for (let i = 1; i <= pagesCount; i++) {
-      pages.push(i)
+    for (let i = 1; i <= last; i++) {
+      if (i == 1 || i == last || i >= left && i < right) {
+        range.push(i);
+      }
     }
 
-    return (
-      <div>
-        {pagesCount ? (
-          <ul className={s.paginator}>
-            {
-              pages.map(x => <li
-                key={x}
-                className={`${s.paginator__item} ${x === this.props.currentPage ? s.paginator__item_active : null}`}
-                onClick={this.onClickPagination(x)}
-              >
-                {x}
-              </li>)
-            }
-          </ul>
-        ) : null
+    for (let i of range) {
+      if (l) {
+        if (i - l === 2) {
+          rangeWithDots.push(l + 1);
+        } else if (i - l !== 1) {
+          rangeWithDots.push('...');
         }
-        <h2>Users</h2>
-        {
-          this.props.users.map(x => <User key={x.id} user={x} onToggleFollow={this.props.onToggleFollow}/>)
-        }
-      </div>
-    );
+      }
+      rangeWithDots.push(i);
+      l = i;
+    }
+
+    return rangeWithDots;
   }
 
+  let pages = pagination(props.currentPage, pagesCount)
+
+  return (
+    <div>
+      {pagesCount ? (
+        <ul className={s.paginator}>
+          {
+            pages.map((x, id) => <li
+              key={id}
+              className={`${s.paginator__item} ${x === props.currentPage ? s.paginator__item_active : null}`}
+              onClick={props.onClickPagination(x)}
+            >
+              {x}
+            </li>)
+          }
+        </ul>
+      ) : null
+      }
+      <h2>Users</h2>
+      {
+        props.users.map(x => <User key={x.id} user={x} onToggleFollow={props.onToggleFollow}/>)
+      }
+    </div>
+  );
 }
 
 export default Users

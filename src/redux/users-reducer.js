@@ -2,12 +2,14 @@ const TOGGLE_FOLLOW = "TOGGLE-FOLLOW";
 const SET_USERS = "SET-USERS";
 const SET_CURRENT_PAGE = "SET-CURRENT-PAGE";
 const SET_TOTAL_COUNT = "SET-TOTAL-COUNT";
+const TOGGLE_PRELOADER = "TOGGLE-PRELOADER";
 
 let initialState = {
   users: [],
   pageSize: 5,
-  totalUsersCount: 16,
-  currentPage: 1
+  totalUsersCount: 0,
+  currentPage: 1,
+  isFetching: false
 }
 
 const usersReducer = (state = initialState, action) => {
@@ -33,18 +35,25 @@ const usersReducer = (state = initialState, action) => {
         ...state,
         totalUsersCount: action.totalCount
       }
+    case TOGGLE_PRELOADER:
+      return {
+        ...state,
+        isFetching: !state.isFetching
+      }
     default:
       return state
   }
 
 }
 
-export const setUsersAC = (users) => ({type: SET_USERS, users})
+export const setUsers = (users) => ({type: SET_USERS, users})
 
-export const toggleFollowAC = (id) => ({type: TOGGLE_FOLLOW, id})
+export const onToggleFollow = (id) => ({type: TOGGLE_FOLLOW, id})
 
-export const setCurrentPageAC = (currentPage) => ({type: SET_CURRENT_PAGE, currentPage})
+export const setCurrentPage = (currentPage) => ({type: SET_CURRENT_PAGE, currentPage})
 
-export const setTotalCountAC = (totalCount) => ({type: SET_TOTAL_COUNT, totalCount})
+export const setTotalCount = (totalCount) => ({type: SET_TOTAL_COUNT, totalCount})
+
+export const onTogglePreloader = () => ({type: TOGGLE_PRELOADER})
 
 export default usersReducer
