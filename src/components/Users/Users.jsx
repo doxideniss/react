@@ -46,7 +46,7 @@ const Users = (props) => {
           {
             pages.map((x, id) => <li
               key={id}
-              className={`${s.paginator__item} ${x === props.currentPage ? s.paginator__item_active : null}`}
+              className={`${s.paginator__item} ${x === props.currentPage && s.paginator__item_active}`}
               onClick={props.onClickPagination(x)}
             >
               {x}
@@ -57,7 +57,7 @@ const Users = (props) => {
       }
       <h2>Users</h2>
       {
-        props.users.map(x => <User key={x.id} user={x} onToggleFollow={props.onToggleFollow}/>)
+        props.users.map(x => <User key={x.id} user={x} followingInProgress={props.followingInProgress} onToggleFollow={props.onToggleFollow} onToggleFollowingProgress={props.onToggleFollowingProgress} />)
       }
     </div>
   );

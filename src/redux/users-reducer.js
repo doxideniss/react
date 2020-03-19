@@ -1,15 +1,17 @@
-const TOGGLE_FOLLOW = "TOGGLE-FOLLOW";
-const SET_USERS = "SET-USERS";
-const SET_CURRENT_PAGE = "SET-CURRENT-PAGE";
-const SET_TOTAL_COUNT = "SET-TOTAL-COUNT";
-const TOGGLE_PRELOADER = "TOGGLE-PRELOADER";
+const TOGGLE_FOLLOW = "TOGGLE_FOLLOW";
+const SET_USERS = "SET_USERS";
+const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
+const SET_TOTAL_COUNT = "SET_TOTAL_COUNT";
+const TOGGLE_IS_FETCHING = "TOGGLE_IS_FETCHING";
+const TOGGLE_IS_FOLLOWING = "TOGGLE_IS_FOLLOWING";
 
 let initialState = {
   users: [],
   pageSize: 5,
   totalUsersCount: 0,
   currentPage: 1,
-  isFetching: false
+  isFetching: false,
+  followingInProgress: []
 }
 
 const usersReducer = (state = initialState, action) => {
@@ -35,10 +37,15 @@ const usersReducer = (state = initialState, action) => {
         ...state,
         totalUsersCount: action.totalCount
       }
-    case TOGGLE_PRELOADER:
+    case TOGGLE_IS_FETCHING:
       return {
         ...state,
-        isFetching: !state.isFetching
+        isFetching: action.payload
+      }
+    case TOGGLE_IS_FOLLOWING:
+      return {
+        ...state,
+        followingInProgress: action.isFetching ? [...state.followingInProgress, action.id] : [...state.followingInProgress.filter(id => id !== action.id)]
       }
     default:
       return state
@@ -54,6 +61,8 @@ export const setCurrentPage = (currentPage) => ({type: SET_CURRENT_PAGE, current
 
 export const setTotalCount = (totalCount) => ({type: SET_TOTAL_COUNT, totalCount})
 
-export const onTogglePreloader = () => ({type: TOGGLE_PRELOADER})
+export const toggleIsFetching = (on) => ({type: TOGGLE_IS_FETCHING, payload: on})
+
+export const toggleFollowingProgress = (isFetching, id) => ({type: TOGGLE_IS_FOLLOWING, isFetching, id})
 
 export default usersReducer

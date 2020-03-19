@@ -5,37 +5,37 @@ import {
   setTotalCount,
   setUsers,
   onToggleFollow,
-  onTogglePreloader
+  toggleIsFetching, toggleFollowingProgress
 } from "../../redux/users-reducer";
-import * as axios from "axios";
 import Users from "./Users";
 import Preloader from "../common/Preloader/Preloader";
+import {usersAPI} from "../../api/api";
 
 class UsersContainer extends React.Component {
 
   componentDidMount() {
-    this.props.onTogglePreloader()
-    axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`)
-      .then(res => {
-        this.props.setUsers(res.data.items)
-        this.props.setTotalCount(res.data.totalCount)
-        this.props.onTogglePreloader()
+    this.props.toggleIsFetching(true)
+
+    usersAPI.getUsers(this.props.currentPage, this.props.pageSize)
+      .then(data => {
+        this.props.setUsers(data.items)
+        this.props.setTotalCount(data.totalCount)
+        this.props.toggleIsFetching(false)
       })
   }
 
   onClickPagination = (p) => {
     return () => {
-      if (+p == p) {
+      if (+p === p) {
         this.props.setCurrentPage(p)
-        this.props.onTogglePreloader()
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${p}&count=${this.props.pageSize}`)
-          .then(res => {
-            this.props.setUsers(res.data.items)
-            this.props.setTotalCount(res.data.totalCount)
-            this.props.onTogglePreloader()
+        this.props.toggleIsFetching(true)
+        usersAPI.getUsers(p, this.props.pageSize)
+          .then(data => {
+            this.props.setUsers(data.items)
+            this.props.setTotalCount(data.totalCount)
+            this.props.toggleIsFetching(false)
           })
       }
-
     }
   }
 
@@ -49,8 +49,10 @@ class UsersContainer extends React.Component {
           currentPage={this.props.currentPage}
           pageSize={this.props.pageSize}
           users={this.props.users}
+          followingInProgress={this.props.followingInProgress}
           onClickPagination={this.onClickPagination}
           onToggleFollow={this.props.onToggleFollow}
+          onToggleFollowingProgress={this.props.toggleFollowingProgress}
         />
       )
       }
@@ -66,7 +68,8 @@ const mapStateToProps = (state) => {
     pageSize: state.usersPage.pageSize,
     totalUsersCount: state.usersPage.totalUsersCount,
     currentPage: state.usersPage.currentPage,
-    isFetching: state.usersPage.isFetching
+    isFetching: state.usersPage.isFetching,
+    followingInProgress: state.usersPage.followingInProgress
   }
 }
 const mapDispatchToProps = {
@@ -74,7 +77,8 @@ const mapDispatchToProps = {
   setUsers,
   setCurrentPage,
   setTotalCount,
-  onTogglePreloader
+  toggleIsFetching,
+  toggleFollowingProgress
 }
 
 
