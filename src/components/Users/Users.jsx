@@ -1,7 +1,6 @@
 import React from "react";
 import User from "./User/User";
 import s from './Users.module.css'
-import * as axios from 'axios';
 
 const Users = (props) => {
 
@@ -17,7 +16,7 @@ const Users = (props) => {
       l;
 
     for (let i = 1; i <= last; i++) {
-      if (i == 1 || i == last || i >= left && i < right) {
+      if ((i === 1 || i === last) || (i >= left && i < right)) {
         range.push(i);
       }
     }
@@ -57,7 +56,7 @@ const Users = (props) => {
       }
       <h2>Users</h2>
       {
-        props.users.map(x => <User key={x.id} user={x} followingInProgress={props.followingInProgress} onToggleFollow={props.onToggleFollow} onToggleFollowingProgress={props.onToggleFollowingProgress} />)
+        props.users.map(user => <User key={user.id} user={user} followingInProgress={props.followingInProgress} follow={props.follow} unfollow={props.unfollow} />)
       }
     </div>
   );

@@ -3,41 +3,28 @@ import {connect} from "react-redux";
 import {
   setCurrentPage,
   setTotalCount,
-  setUsers,
-  onToggleFollow,
-  toggleIsFetching, toggleFollowingProgress
+  getUsers,
+  follow,
+  unfollow
 } from "../../redux/users-reducer";
+
 import Users from "./Users";
 import Preloader from "../common/Preloader/Preloader";
-import {usersAPI} from "../../api/api";
 
 class UsersContainer extends React.Component {
 
   componentDidMount() {
-    this.props.toggleIsFetching(true)
-
-    usersAPI.getUsers(this.props.currentPage, this.props.pageSize)
-      .then(data => {
-        this.props.setUsers(data.items)
-        this.props.setTotalCount(data.totalCount)
-        this.props.toggleIsFetching(false)
-      })
-  }
+    this.props.getUsers(this.props.currentPage, this.props.pageSize);
+  };
 
   onClickPagination = (p) => {
     return () => {
       if (+p === p) {
-        this.props.setCurrentPage(p)
-        this.props.toggleIsFetching(true)
-        usersAPI.getUsers(p, this.props.pageSize)
-          .then(data => {
-            this.props.setUsers(data.items)
-            this.props.setTotalCount(data.totalCount)
-            this.props.toggleIsFetching(false)
-          })
+        this.props.setCurrentPage(p);
+        this.props.getUsers(p, this.props.pageSize);
       }
     }
-  }
+  };
 
   render() {
     return <>
@@ -51,35 +38,34 @@ class UsersContainer extends React.Component {
           users={this.props.users}
           followingInProgress={this.props.followingInProgress}
           onClickPagination={this.onClickPagination}
-          onToggleFollow={this.props.onToggleFollow}
-          onToggleFollowingProgress={this.props.toggleFollowingProgress}
+          follow={this.props.follow}
+          unfollow={this.props.unfollow}
         />
       )
       }
     </>
 
-  }
+  };
 
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({usersPage}) => {
   return {
-    users: state.usersPage.users,
-    pageSize: state.usersPage.pageSize,
-    totalUsersCount: state.usersPage.totalUsersCount,
-    currentPage: state.usersPage.currentPage,
-    isFetching: state.usersPage.isFetching,
-    followingInProgress: state.usersPage.followingInProgress
+    users: usersPage.users,
+    pageSize: usersPage.pageSize,
+    totalUsersCount: usersPage.totalUsersCount,
+    currentPage: usersPage.currentPage,
+    isFetching: usersPage.isFetching,
+    followingInProgress: usersPage.followingInProgress
   }
-}
+};
 const mapDispatchToProps = {
-  onToggleFollow,
-  setUsers,
   setCurrentPage,
   setTotalCount,
-  toggleIsFetching,
-  toggleFollowingProgress
-}
+  getUsers,
+  follow,
+  unfollow
+};
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsersContainer);

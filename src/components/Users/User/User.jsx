@@ -1,36 +1,15 @@
 import React from 'react'
 import userPhoto from '../../../assets/images/avatar.jpg'
 import {NavLink} from "react-router-dom";
-import * as axios from "axios";
-import {followAPI} from "../../../api/api";
 
 const User = props => {
-  const {user, followingInProgress, onToggleFollow, onToggleFollowingProgress} = props
+  const {user, followingInProgress, follow, unfollow} = props;
 
-  const onBtnClick = e => {
-    onToggleFollowingProgress(true, user.id)
+  const onBtnClick = () => {
     if (user.followed) {
-      followAPI.deleteFollow(user.id)
-        .then(data => {
-          if (!data.resultCode) {
-            onToggleFollow(user.id);
-            onToggleFollowingProgress(false, user.id)
-          }
-        })
-        .catch(e => {
-          onToggleFollowingProgress(false, user.id)
-        })
+      unfollow(user.id);
     } else if (!user.followed) {
-      followAPI.postFollow(user.id)
-        .then(data => {
-          if (!data.resultCode) {
-            onToggleFollow(user.id);
-            onToggleFollowingProgress(false, user.id)
-          }
-        })
-        .catch(e => {
-          onToggleFollowingProgress(false, user.id)
-        })
+      follow(user.id);
     }
   };
 
