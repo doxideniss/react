@@ -4,41 +4,47 @@ import {withRouter} from "react-router-dom";
 
 import Profile from "./Profile";
 import {
-  setProfile,
-  getProfile
+  getProfile, updateStatus, getStatus
 } from "../../redux/profile-reducer";
+import {withAuthRedirect} from "../../hoc/withAuthRedirect";
+import {compose} from "redux";
 
 class ProfileContainer extends React.Component {
   componentDidMount() {
     let userId = this.props.match.params.userId;
     if (!userId) {
-      userId = 2
+      if (this.props.isAuth) {
+        userId = this.props.authUserId;
+      }
     }
     this.props.getProfile(userId);
-  }
-
-  componentWillUnmount() {
-    this.props.setProfile(null)
+    this.props.getStatus(userId);
   }
 
   render() {
     return (
       <div>
-        <Profile profile={this.props.profileInfo}/>
+        <Profile profile={this.props.profileInfo} status={this.props.status} updateStatus={this.props.updateStatus}/>
       </div>
     )
   }
 }
 
 const mapStateToProps = state => ({
-  profileInfo: state.profilePage.profileInfo
+  profileInfo: state.profilePage.profileInfo,
+  status: state.profilePage.status,
+  authUserId: state.auth.userId,
+  isAuth: state.auth.isAuth
 });
 
 const mapDispatchToProps = {
-  setProfile,
-  getProfile
+  getProfile,
+  getStatus,
+  updateStatus
 };
 
-let URIDataContainerComponent = withRouter(ProfileContainer);
-
-export default connect(mapStateToProps, mapDispatchToProps)(URIDataContainerComponent);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withRouter,
+  withAuthRedirect
+)(ProfileContainer);
