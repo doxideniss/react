@@ -6,15 +6,15 @@ import Profile from "./Profile";
 import {
   getProfile, updateStatus, getStatus
 } from "../../redux/profile-reducer";
-import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
 
 class ProfileContainer extends React.Component {
   componentDidMount() {
     let userId = this.props.match.params.userId;
     if (!userId) {
-      if (this.props.isAuth) {
-        userId = this.props.authUserId;
+      userId = this.props.authUserId;
+      if (!userId) {
+        return this.props.history.push('/login');
       }
     }
     this.props.getProfile(userId);
@@ -45,6 +45,5 @@ const mapDispatchToProps = {
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withRouter,
-  withAuthRedirect
+  withRouter
 )(ProfileContainer);

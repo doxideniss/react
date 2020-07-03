@@ -14,7 +14,7 @@ let initialState = {
   currentPage: 1,
   isFetching: false,
   followingInProgress: []
-}
+};
 
 const usersReducer = (state = initialState, action) => {
 
@@ -23,37 +23,37 @@ const usersReducer = (state = initialState, action) => {
       return {
         ...state,
         users: state.users.map(x => (x.id === action.id ? {...x, followed: !x.followed} : x))
-      }
+      };
     case SET_USERS:
       return {
         ...state,
         users: [...action.users]
-      }
+      };
     case SET_CURRENT_PAGE:
       return {
         ...state,
         currentPage: action.currentPage
-      }
+      };
     case SET_TOTAL_COUNT:
       return {
         ...state,
         totalUsersCount: action.totalCount
-      }
+      };
     case TOGGLE_IS_FETCHING:
       return {
         ...state,
         isFetching: action.payload
-      }
+      };
     case TOGGLE_IS_FOLLOWING:
       return {
         ...state,
         followingInProgress: action.isFetching ? [...state.followingInProgress, action.id] : [...state.followingInProgress.filter(id => id !== action.id)]
-      }
+      };
     default:
       return state
   }
 
-}
+};
 
 export const setUsers = (users) => ({type: SET_USERS, users});
 

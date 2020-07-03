@@ -5,7 +5,7 @@ import ProfileStatus from './ProfileStatus';
 
 const ProfileInfo = (props) => {
 
-  let {profile, status, updateStatus} = props
+  let {profile, status, updateStatus} = props;
 
   if (!props.profile) {
     return <Preloader/>
